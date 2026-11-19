@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RIFFDNA™ // Player-Adaptive Tone Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #070609;
+    --glass: linear-gradient(155deg, rgba(255,255,255,0.065) 0%, rgba(255,255,255,0.02) 100%);
+    --border: rgba(255, 255, 255, 0.14);
+    --rim: inset 0 1px 0 rgba(255, 255, 255, 0.20);
+    --text: #ffffff;
+    --body: #dde2ec;
+    --muted: #98a2b3;
+    --tube: #ff7a00;
+    --ruby: #ed1c24;
+    --cyan: #22d3ee;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(ellipse 55% 42% at 82% 8%, rgba(255, 122, 0, 0.18), transparent 65%),
+      radial-gradient(ellipse 48% 42% at 18% 92%, rgba(237, 28, 36, 0.14), transparent 65%),
+      linear-gradient(rgba(255, 255, 255, 0.024) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.024) 1px, transparent 1px),
+      var(--bg);
+    background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px, 100% 100%;
+    padding: 28px 20px 44px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+  .card {
+    background: var(--glass);
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: var(--rim), 0 14px 36px rgba(0, 0, 0, 0.52);
+    padding: 24px 26px;
+  }
+  .hero { border-left: 3px solid var(--tube); }
+  .badge {
+    display: inline-block;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 3px;
+    background: rgba(255, 122, 0, 0.14);
+    border: 1px solid rgba(255, 122, 0, 0.48);
+    color: #ffb057;
+    margin-bottom: 12px;
+  }
+  h1 { font-size: 34px; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 6px; }
+  .tagline { font-size: 16.5px; font-weight: 600; color: #ffb057; margin-bottom: 12px; }
+  .lead { font-size: 14.5px; color: var(--body); max-width: 740px; margin-bottom: 8px; }
+  .muted { font-size: 14px; color: var(--muted); }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #ffffff;
+    background: linear-gradient(135deg, #ff7a00 0%, #ed1c24 100%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 16px rgba(255, 122, 0, 0.30);
+  }
+  .btn.sec {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  }
+  .btn:hover { filter: brightness(1.1); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  h2 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #ffb057;
+    margin-bottom: 10px;
+  }
+  h3 { font-size: 15px; font-weight: 700; color: #ffffff; margin-bottom: 6px; }
+  ul { list-style: none; display: grid; gap: 6px; margin: 10px 0; }
+  ul li { font-size: 13.5px; color: var(--body); padding-left: 14px; position: relative; }
+  ul li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 5px;
+    height: 5px;
+    background: var(--tube);
+  }
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .pillar {
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11.5px;
+    color: var(--cyan);
+    font-weight: 600;
+    text-align: center;
+  }
+  .quote {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    border-left: 3px solid var(--ruby);
+  }
+  .quote span {
+    display: block;
+    margin-top: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  @media (max-width: 760px) {
+    .grid-2, .grid-3, .pillars { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card hero">
+      <div class="badge">RIFFDNA™ // ADAPTIVE TONE ENGINE</div>
+      <h1>RIFFDNA™</h1>
+      <div class="tagline">Every player leaves a signature. RIFFDNA learns yours.</div>
+      <p class="lead">
+        RIFFDNA is an AI-powered player-adaptive tone system that listens to how musicians perform
+        and continuously adjusts tone characteristics in real time.
+      </p>
+      <p class="muted">Most guitar rigs force musicians to adapt to presets. <strong>RIFFDNA adapts to the musician.</strong></p>
+      <div class="actions">
+        <a class="btn" href="https://github.com/JupiterIsland/adaptive-tone-engine" target="_blank" rel="noopener">Open GitHub Repository</a>
+        <a class="btn sec" href="https://github.com/JupiterIsland/memoryos" target="_blank" rel="noopener">MemoryOS // Jupiter Studio</a>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <div class="card">
+        <h2>Why RIFFDNA?</h2>
+        <p class="muted">Traditional rigs require:</p>
+        <ul>
+          <li>Constant preset switching</li>
+          <li>Manual EQ adjustments</li>
+          <li>Compression tweaking &amp; drive balancing</li>
+          <li>Different setups for rhythm and lead</li>
+        </ul>
+        <p class="lead" style="margin-top:10px; font-size:13.5px;">
+          By analysing playing style, picking dynamics, note density, articulation, and performance behaviour,
+          RIFFDNA automatically adjusts tone parameters while you play.
+        </p>
+        <div class="pillars">
+          <div class="pillar">One player.</div>
+          <div class="pillar">One rig.</div>
+          <div class="pillar">Live evolution.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Watch The Tone Learn</h2>
+        <p class="muted">Imagine moving naturally between:</p>
+        <ul>
+          <li>Clean rhythm</li>
+          <li>Blues lead</li>
+          <li>Heavy palm-muted riffs</li>
+          <li>Expressive solos</li>
+        </ul>
+        <div class="pillars" style="margin-top:14px;">
+          <div class="pillar">No pedal tap</div>
+          <div class="pillar">No preset swap</div>
+          <div class="pillar">No menu diving</div>
+        </div>
+        <p class="lead" style="margin-top:12px; font-size:13.5px;">
+          RIFFDNA follows the player and reacts in real time.
+        </p>
+      </div>
+    </section>
+
+    <section class="grid-3">
+      <div class="card">
+        <h2>Player Recognition</h2>
+        <p class="muted" style="font-size:13px;">Builds a live performance profile from your playing behaviour:</p>
+        <ul>
+          <li>Picking dynamics &amp; attack</li>
+          <li>Playing intensity</li>
+          <li>Note density</li>
+          <li>Articulation patterns</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Adaptive Tone Engine</h2>
+        <p class="muted" style="font-size:13px;">Tone evolves automatically during performance:</p>
+        <ul>
+          <li>Gain &amp; EQ adaptation</li>
+          <li>Presence control</li>
+          <li>Compression balancing</li>
+          <li>Response shaping</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>Dual Processing</h2>
+        <h3>Performance Engine</h3>
+        <p class="muted" style="font-size:13px; margin-bottom:10px;">Ultra-low latency audio processing.</p>
+        <h3>Learning Engine</h3>
+        <p class="muted" style="font-size:13px;">Analyses player behaviour and continuously refines tone decisions.</p>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <div class="card">
+        <h2>Signature Profiles &amp; Live Mode</h2>
+        <p class="lead" style="font-size:13.5px;">Every musician develops a unique playing fingerprint. RIFFDNA learns yours across:</p>
+        <div class="pillars" style="grid-template-columns: repeat(4, 1fr);">
+          <div class="pillar">Studio</div>
+          <div class="pillar">Practice</div>
+          <div class="pillar">Rehearsal</div>
+          <div class="pillar">Stage</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>The Vision</h2>
+        <p class="lead" style="font-size:13.5px;">
+          Most music technology focuses on equipment. <strong>RIFFDNA focuses on the player.</strong>
+        </p>
+        <p class="muted" style="font-size:13.5px; margin-top:6px;">
+          Create technology that responds to musicians as naturally as musicians respond to their instruments.
+        </p>
+      </div>
+    </section>
+
+    <section class="card quote">
+      &ldquo;Your tone should follow your playing. Not the other way around.&rdquo;
+      <span>FOUNDER: CREATED BY RICHARD JOHN MURRAY // JUPITERISLAND</span>
+    </section>
+  </div>
+</body>
+</html>
