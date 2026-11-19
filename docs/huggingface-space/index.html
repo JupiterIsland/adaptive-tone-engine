@@ -3,30 +3,31 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>RIFFDNA™ // Player-Adaptive Tone Engine</title>
+<title>RIFFDNA™ // Player-Adaptive Tone System</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #070609;
+    --bg: #07080b;
     --glass: linear-gradient(155deg, rgba(255,255,255,0.065) 0%, rgba(255,255,255,0.02) 100%);
     --border: rgba(255, 255, 255, 0.14);
     --rim: inset 0 1px 0 rgba(255, 255, 255, 0.20);
     --text: #ffffff;
     --body: #dde2ec;
     --muted: #98a2b3;
-    --tube: #ff7a00;
-    --ruby: #ed1c24;
-    --cyan: #22d3ee;
+    --cyan: #00e5ff;
+    --silver: #bfc8d6;
+    --amber: #ff7a00;
+    --green: #10b981;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: var(--text);
     background:
-      radial-gradient(ellipse 55% 42% at 82% 8%, rgba(255, 122, 0, 0.18), transparent 65%),
-      radial-gradient(ellipse 48% 42% at 18% 92%, rgba(237, 28, 36, 0.14), transparent 65%),
+      radial-gradient(ellipse 55% 42% at 82% 8%, rgba(0, 229, 255, 0.16), transparent 65%),
+      radial-gradient(ellipse 48% 42% at 18% 92%, rgba(255, 122, 0, 0.12), transparent 65%),
       linear-gradient(rgba(255, 255, 255, 0.024) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 255, 255, 0.024) 1px, transparent 1px),
       var(--bg);
@@ -35,7 +36,7 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+  .wrap { max-width: 940px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
   .card {
     background: var(--glass);
     backdrop-filter: blur(22px) saturate(160%);
@@ -45,7 +46,7 @@
     box-shadow: var(--rim), 0 14px 36px rgba(0, 0, 0, 0.52);
     padding: 24px 26px;
   }
-  .hero { border-left: 3px solid var(--tube); }
+  .hero { border-left: 3px solid var(--cyan); }
   .badge {
     display: inline-block;
     font-family: "JetBrains Mono", monospace;
@@ -55,36 +56,91 @@
     text-transform: uppercase;
     padding: 3px 9px;
     border-radius: 3px;
-    background: rgba(255, 122, 0, 0.14);
-    border: 1px solid rgba(255, 122, 0, 0.48);
-    color: #ffb057;
+    background: rgba(0, 229, 255, 0.12);
+    border: 1px solid rgba(0, 229, 255, 0.45);
+    color: var(--cyan);
     margin-bottom: 12px;
   }
   h1 { font-size: 34px; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 6px; }
-  .tagline { font-size: 16.5px; font-weight: 600; color: #ffb057; margin-bottom: 12px; }
+  .tagline { font-size: 16.5px; font-weight: 600; color: var(--cyan); margin-bottom: 10px; }
   .lead { font-size: 14.5px; color: var(--body); max-width: 740px; margin-bottom: 8px; }
-  .muted { font-size: 14px; color: var(--muted); }
-  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .muted { font-size: 13.5px; color: var(--muted); }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
   .btn {
     display: inline-flex;
     align-items: center;
+    gap: 8px;
     padding: 9px 16px;
     border-radius: 4px;
     font-size: 13px;
     font-weight: 700;
     text-decoration: none;
-    color: #ffffff;
-    background: linear-gradient(135deg, #ff7a00 0%, #ed1c24 100%);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 16px rgba(255, 122, 0, 0.30);
+    cursor: pointer;
+    color: #06090e;
+    background: linear-gradient(135deg, #00e5ff 0%, #38bdf8 100%);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 4px 16px rgba(0, 229, 255, 0.25);
   }
   .btn.sec {
+    color: #ffffff;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
   }
-  .btn:hover { filter: brightness(1.1); }
+  .btn.active-mode {
+    color: #ffffff;
+    background: linear-gradient(135deg, #ff7a00 0%, #ed1c24 100%);
+    border-color: rgba(255,255,255,0.4);
+  }
+  .btn:hover { filter: brightness(1.08); }
 
+  /* Interactive Hear-It Audio Rig */
+  .rig-card { border-left: 3px solid var(--amber); }
+  .rig-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+  .scope-box {
+    width: 100%;
+    height: 92px;
+    background: #050609;
+    border: 1px solid rgba(0, 229, 255, 0.28);
+    border-radius: 4px;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  #rig-scope { width: 100%; height: 100%; display: block; }
+  .scope-tag {
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--cyan);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .scope-state {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--amber);
+    font-weight: 700;
+  }
+  .knobs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+  .knob {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .knob-k { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .knob-v { font-size: 15px; font-weight: 700; color: var(--cyan); margin: 3px 0 6px; }
+  .meter { height: 5px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+  .meter i { display: block; height: 100%; background: linear-gradient(90deg, var(--cyan), var(--amber)); transition: width 0.25s ease; }
+
+  .style-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   h2 {
@@ -93,7 +149,7 @@
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #ffb057;
+    color: var(--cyan);
     margin-bottom: 10px;
   }
   h3 { font-size: 15px; font-weight: 700; color: #ffffff; margin-bottom: 6px; }
@@ -106,31 +162,14 @@
     top: 9px;
     width: 5px;
     height: 5px;
-    background: var(--tube);
-  }
-  .pillars {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 12px;
-  }
-  .pillar {
-    background: rgba(255, 255, 255, 0.035);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 4px;
-    padding: 10px 12px;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 11.5px;
-    color: var(--cyan);
-    font-weight: 600;
-    text-align: center;
+    background: var(--cyan);
   }
   .quote {
     text-align: center;
     font-size: 16px;
     font-weight: 600;
     color: #ffffff;
-    border-left: 3px solid var(--ruby);
+    border-left: 3px solid var(--cyan);
   }
   .quote span {
     display: block;
@@ -141,127 +180,281 @@
     letter-spacing: 0.08em;
   }
   @media (max-width: 760px) {
-    .grid-2, .grid-3, .pillars { grid-template-columns: 1fr; }
+    .grid-2, .grid-3, .knobs { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
   <div class="wrap">
     <section class="card hero">
-      <div class="badge">RIFFDNA™ // ADAPTIVE TONE ENGINE</div>
-      <h1>RIFFDNA™</h1>
-      <div class="tagline">Every player leaves a signature. RIFFDNA learns yours.</div>
+      <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom:12px;">
+        <img src="riffdna_logo.png" alt="RIFFDNA Logo" style="width:76px; height:76px; border-radius:10px; border:1px solid rgba(0,229,255,0.35); box-shadow:0 6px 24px rgba(0,229,255,0.2);" />
+        <div>
+          <div class="badge" style="margin-bottom:6px;">RIFFDNA™ // PLAYER-ADAPTIVE TONE SYSTEM</div>
+          <h1 style="margin-bottom:2px;">RIFFDNA™</h1>
+          <div class="tagline" style="margin-bottom:0;">Every player leaves a signature. RIFFDNA learns yours.</div>
+        </div>
+      </div>
       <p class="lead">
-        RIFFDNA is an AI-powered player-adaptive tone system that listens to how musicians perform
-        and continuously adjusts tone characteristics in real time.
+        RIFFDNA listens to how musicians perform—picking dynamics, attack velocity, note density, and articulation—and
+        continuously reshapes amp gain, EQ, presence, and compression in real time.
       </p>
       <p class="muted">Most guitar rigs force musicians to adapt to presets. <strong>RIFFDNA adapts to the musician.</strong></p>
       <div class="actions">
-        <a class="btn" href="https://github.com/JupiterIsland/adaptive-tone-engine" target="_blank" rel="noopener">Open GitHub Repository</a>
+        <a class="btn" href="https://github.com/JupiterIsland/adaptive-tone-engine" target="_blank" rel="noopener">GitHub Repository</a>
         <a class="btn sec" href="https://github.com/JupiterIsland/memoryos" target="_blank" rel="noopener">MemoryOS // Jupiter Studio</a>
       </div>
     </section>
 
-    <section class="grid-2">
-      <div class="card">
-        <h2>Why RIFFDNA?</h2>
-        <p class="muted">Traditional rigs require:</p>
-        <ul>
-          <li>Constant preset switching</li>
-          <li>Manual EQ adjustments</li>
-          <li>Compression tweaking &amp; drive balancing</li>
-          <li>Different setups for rhythm and lead</li>
-        </ul>
-        <p class="lead" style="margin-top:10px; font-size:13.5px;">
-          By analysing playing style, picking dynamics, note density, articulation, and performance behaviour,
-          RIFFDNA automatically adjusts tone parameters while you play.
-        </p>
-        <div class="pillars">
-          <div class="pillar">One player.</div>
-          <div class="pillar">One rig.</div>
-          <div class="pillar">Live evolution.</div>
+    <!-- INTERACTIVE WEB AUDIO HEAR-IT RIG -->
+    <section class="card rig-card">
+      <div class="rig-head">
+        <div>
+          <h2 style="margin-bottom:2px; color:#ffb057;">Hear RIFFDNA Adapt Live (Interactive Web Audio Rig)</h2>
+          <div class="muted" style="font-size:12.5px;">Click a playing style below, then toggle <strong>RIFFDNA ON / BYPASS</strong> to hear real-time DSP adaptation.</div>
+        </div>
+        <button class="btn active-mode" id="btn-adapt-toggle" onclick="toggleRiffDNA()">RIFFDNA: ON (ADAPTIVE)</button>
+      </div>
+
+      <div class="scope-box">
+        <canvas id="rig-scope"></canvas>
+        <span class="scope-tag">LOOP A (&lt;3ms DSP) + LOOP B (AI PROFILE)</span>
+        <span class="scope-state" id="detected-style">IDLE — CLICK A RIFF BELOW</span>
+      </div>
+
+      <div class="knobs">
+        <div class="knob">
+          <div class="knob-k">Drive / Gain</div>
+          <div class="knob-v" id="k-gain">2.0</div>
+          <div class="meter"><i id="b-gain" style="width:20%"></i></div>
+        </div>
+        <div class="knob">
+          <div class="knob-k">Mid Push (1.1kHz)</div>
+          <div class="knob-v" id="k-mid">0.0 dB</div>
+          <div class="meter"><i id="b-mid" style="width:35%"></i></div>
+        </div>
+        <div class="knob">
+          <div class="knob-k">Presence (3.8kHz)</div>
+          <div class="knob-v" id="k-pres">+1.0 dB</div>
+          <div class="meter"><i id="b-pres" style="width:45%"></i></div>
+        </div>
+        <div class="knob">
+          <div class="knob-k">Compression</div>
+          <div class="knob-v" id="k-comp">2.0 : 1</div>
+          <div class="meter"><i id="b-comp" style="width:25%"></i></div>
         </div>
       </div>
 
-      <div class="card">
-        <h2>Watch The Tone Learn</h2>
-        <p class="muted">Imagine moving naturally between:</p>
-        <ul>
-          <li>Clean rhythm</li>
-          <li>Blues lead</li>
-          <li>Heavy palm-muted riffs</li>
-          <li>Expressive solos</li>
-        </ul>
-        <div class="pillars" style="margin-top:14px;">
-          <div class="pillar">No pedal tap</div>
-          <div class="pillar">No preset swap</div>
-          <div class="pillar">No menu diving</div>
-        </div>
-        <p class="lead" style="margin-top:12px; font-size:13.5px;">
-          RIFFDNA follows the player and reacts in real time.
-        </p>
+      <div class="style-bar">
+        <button class="btn sec" onclick="playStyle('clean')">1. Clean Rhythm Chords</button>
+        <button class="btn sec" onclick="playStyle('palm')">2. Heavy Palm-Muted Riffs</button>
+        <button class="btn sec" onclick="playStyle('lead')">3. Expressive Lead Solo</button>
+        <button class="btn" onclick="playFullSequence()">&#9654; Play 3-Style Auto-Morph Demo</button>
+        <button class="btn sec" onclick="stopAudio()">&#9632; Stop</button>
       </div>
     </section>
 
     <section class="grid-3">
       <div class="card">
         <h2>Player Recognition</h2>
-        <p class="muted" style="font-size:13px;">Builds a live performance profile from your playing behaviour:</p>
+        <p class="muted">Builds a live performance fingerprint from your playing behaviour:</p>
         <ul>
-          <li>Picking dynamics &amp; attack</li>
-          <li>Playing intensity</li>
-          <li>Note density</li>
-          <li>Articulation patterns</li>
+          <li>Picking dynamics &amp; attack rise-time</li>
+          <li>Playing intensity &amp; RMS crest factor</li>
+          <li>Note density &amp; articulation patterns</li>
         </ul>
       </div>
 
       <div class="card">
         <h2>Adaptive Tone Engine</h2>
-        <p class="muted" style="font-size:13px;">Tone evolves automatically during performance:</p>
+        <p class="muted">Reshapes your tone continuously while you perform:</p>
         <ul>
-          <li>Gain &amp; EQ adaptation</li>
-          <li>Presence control</li>
-          <li>Compression balancing</li>
-          <li>Response shaping</li>
+          <li>Dynamic gain &amp; drive scaling</li>
+          <li>Adaptive EQ &amp; presence shaping</li>
+          <li>Intelligent compression balancing</li>
         </ul>
       </div>
 
       <div class="card">
-        <h2>Dual Processing</h2>
-        <h3>Performance Engine</h3>
-        <p class="muted" style="font-size:13px; margin-bottom:10px;">Ultra-low latency audio processing.</p>
-        <h3>Learning Engine</h3>
-        <p class="muted" style="font-size:13px;">Analyses player behaviour and continuously refines tone decisions.</p>
-      </div>
-    </section>
-
-    <section class="grid-2">
-      <div class="card">
-        <h2>Signature Profiles &amp; Live Mode</h2>
-        <p class="lead" style="font-size:13.5px;">Every musician develops a unique playing fingerprint. RIFFDNA learns yours across:</p>
-        <div class="pillars" style="grid-template-columns: repeat(4, 1fr);">
-          <div class="pillar">Studio</div>
-          <div class="pillar">Practice</div>
-          <div class="pillar">Rehearsal</div>
-          <div class="pillar">Stage</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h2>The Vision</h2>
-        <p class="lead" style="font-size:13.5px;">
-          Most music technology focuses on equipment. <strong>RIFFDNA focuses on the player.</strong>
-        </p>
-        <p class="muted" style="font-size:13.5px; margin-top:6px;">
-          Create technology that responds to musicians as naturally as musicians respond to their instruments.
-        </p>
+        <h2>Dual-Loop Architecture</h2>
+        <h3>Loop A — Performance (&lt;3 ms)</h3>
+        <p class="muted" style="margin-bottom:10px;">Ultra-low latency DSP with click-free cross-faded parameter updates.</p>
+        <h3>Loop B — Learning (15–50 ms)</h3>
+        <p class="muted">Async feature analysis classifying style and refining tone targets.</p>
       </div>
     </section>
 
     <section class="card quote">
       &ldquo;Your tone should follow your playing. Not the other way around.&rdquo;
-      <span>FOUNDER: CREATED BY RICHARD JOHN MURRAY // JUPITERISLAND</span>
+      <span>CREATED BY RICHARD JOHN MURRAY // RIFFDNA™ BY JUPITERISLAND</span>
     </section>
   </div>
+
+<script>
+let audioCtx = null, analyser = null, driveNode = null, midEq = null, presEq = null, compNode = null, masterGain = null;
+let riffdnaEnabled = true;
+let activeTimer = null;
+let currentMode = "idle";
+
+const PROFILES = {
+  bypass: { label: "FIXED PRESET (RIFFDNA BYPASSED)", gain: 2.2, mid: 0.0, pres: 0.5, comp: 2.0 },
+  clean:  { label: "DETECTED: SOFT ATTACK // CLEAN RHYTHM", gain: 1.4, mid: -1.0, pres: +3.2, comp: 2.4 },
+  palm:   { label: "DETECTED: AGGRESSIVE TRANSIENTS // HEAVY PALM MUTE", gain: 8.6, mid: +2.4, pres: +4.5, comp: 6.5 },
+  lead:   { label: "DETECTED: LONG SUSTAIN // EXPRESSIVE LEAD SOLO", gain: 6.4, mid: +5.2, pres: +3.8, comp: 5.0 },
+};
+
+function makeDistortionCurve(amount) {
+  const k = amount * 16;
+  const n = 2048;
+  const curve = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    const x = (i * 2) / n - 1;
+    curve[i] = ((3 + k) * x * 20 * (Math.PI / 180)) / (Math.PI + k * Math.abs(x));
+  }
+  return curve;
+}
+
+function ensureAudio() {
+  if (audioCtx) { if (audioCtx.state === "suspended") audioCtx.resume(); return; }
+  const AC = window.AudioContext || window.webkitAudioContext;
+  audioCtx = new AC();
+  driveNode = audioCtx.createWaveShaper();
+  driveNode.oversample = "4x";
+  midEq = audioCtx.createBiquadFilter();
+  midEq.type = "peaking"; midEq.frequency.value = 1100; midEq.Q.value = 1.2;
+  presEq = audioCtx.createBiquadFilter();
+  presEq.type = "highshelf"; presEq.frequency.value = 3800;
+  compNode = audioCtx.createDynamicsCompressor();
+  compNode.threshold.value = -22; compNode.attack.value = 0.008; compNode.release.value = 0.14;
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0.28;
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 512;
+
+  driveNode.connect(midEq);
+  midEq.connect(presEq);
+  presEq.connect(compNode);
+  compNode.connect(masterGain);
+  masterGain.connect(analyser);
+  analyser.connect(audioCtx.destination);
+  applyProfile("clean");
+}
+
+function applyProfile(modeKey) {
+  const p = riffdnaEnabled ? (PROFILES[modeKey] || PROFILES.clean) : PROFILES.bypass;
+  document.getElementById("detected-style").textContent = p.label;
+  document.getElementById("k-gain").textContent = p.gain.toFixed(1);
+  document.getElementById("b-gain").style.width = Math.min(100, p.gain * 10) + "%";
+  document.getElementById("k-mid").textContent = (p.mid >= 0 ? "+" : "") + p.mid.toFixed(1) + " dB";
+  document.getElementById("b-mid").style.width = Math.min(100, Math.max(8, (p.mid + 4) * 10)) + "%";
+  document.getElementById("k-pres").textContent = (p.pres >= 0 ? "+" : "") + p.pres.toFixed(1) + " dB";
+  document.getElementById("b-pres").style.width = Math.min(100, Math.max(8, (p.pres + 3) * 12)) + "%";
+  document.getElementById("k-comp").textContent = p.comp.toFixed(1) + " : 1";
+  document.getElementById("b-comp").style.width = Math.min(100, p.comp * 12) + "%";
+
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+  driveNode.curve = makeDistortionCurve(p.gain);
+  midEq.gain.setTargetAtTime(p.mid, now, 0.04);
+  presEq.gain.setTargetAtTime(p.pres, now, 0.04);
+  compNode.ratio.setTargetAtTime(p.comp, now, 0.04);
+}
+
+function pluckNote(freq, dur, velocity, palmMute) {
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const sub = audioCtx.createOscillator();
+  const filt = audioCtx.createBiquadFilter();
+  const env = audioCtx.createGain();
+  osc.type = "sawtooth"; osc.frequency.value = freq;
+  sub.type = "triangle"; sub.frequency.value = freq * 2;
+  filt.type = "lowpass";
+  filt.frequency.setValueAtTime(palmMute ? 1400 : 4200, now);
+  filt.frequency.exponentialRampToValueAtTime(palmMute ? 260 : 780, now + dur);
+
+  env.gain.setValueAtTime(0.001, now);
+  env.gain.linearRampToValueAtTime(velocity, now + 0.006);
+  env.gain.exponentialRampToValueAtTime(0.001, now + dur);
+
+  osc.connect(filt); sub.connect(filt);
+  filt.connect(env); env.connect(driveNode);
+  osc.start(now); sub.start(now);
+  osc.stop(now + dur + 0.03); sub.stop(now + dur + 0.03);
+}
+
+function stopAudio() {
+  if (activeTimer) { clearInterval(activeTimer); activeTimer = null; }
+  currentMode = "idle";
+  document.getElementById("detected-style").textContent = "IDLE — CLICK A RIFF BELOW";
+}
+
+function toggleRiffDNA() {
+  riffdnaEnabled = !riffdnaEnabled;
+  const btn = document.getElementById("btn-adapt-toggle");
+  btn.textContent = riffdnaEnabled ? "RIFFDNA: ON (ADAPTIVE)" : "RIFFDNA: BYPASSED (FIXED)";
+  btn.classList.toggle("active-mode", riffdnaEnabled);
+  btn.classList.toggle("sec", !riffdnaEnabled);
+  if (currentMode !== "idle") applyProfile(currentMode);
+}
+
+function playStyle(style) {
+  stopAudio();
+  ensureAudio();
+  currentMode = style;
+  applyProfile(style);
+  let step = 0;
+  const cleanNotes = [164.81, 246.94, 329.63, 392.00, 329.63, 246.94];
+  const palmNotes  = [82.41, 82.41, 98.00, 82.41, 110.00, 82.41, 123.47, 98.00];
+  const leadNotes  = [329.63, 392.00, 440.00, 493.88, 587.33, 659.25, 587.33, 493.88];
+
+  const intervalMs = style === "palm" ? 185 : (style === "lead" ? 340 : 420);
+  const fire = () => {
+    if (style === "clean") pluckNote(cleanNotes[step % cleanNotes.length], 0.95, 0.34, false);
+    else if (style === "palm") pluckNote(palmNotes[step % palmNotes.length], 0.22, 0.72, true);
+    else pluckNote(leadNotes[step % leadNotes.length], 0.75, 0.55, false);
+    step++;
+  };
+  fire();
+  activeTimer = setInterval(fire, intervalMs);
+}
+
+function playFullSequence() {
+  playStyle("clean");
+  setTimeout(() => { if (currentMode === "clean") playStyle("palm"); }, 3500);
+  setTimeout(() => { if (currentMode === "palm") playStyle("lead"); }, 7000);
+  setTimeout(() => { stopAudio(); }, 11000);
+}
+
+(function drawScope() {
+  const c = document.getElementById("rig-scope");
+  const ctx = c.getContext("2d");
+  function frame() {
+    const r = c.getBoundingClientRect();
+    if (c.width !== Math.floor(r.width)) { c.width = Math.max(300, Math.floor(r.width)); c.height = 92; }
+    ctx.fillStyle = "#050609";
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.strokeStyle = "rgba(0,229,255,0.14)";
+    ctx.beginPath(); ctx.moveTo(0, c.height / 2); ctx.lineTo(c.width, c.height / 2); ctx.stroke();
+
+    ctx.strokeStyle = riffdnaEnabled ? "#00e5ff" : "#98a2b3";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    if (analyser && currentMode !== "idle") {
+      const data = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteTimeDomainData(data);
+      const step = c.width / data.length;
+      for (let i = 0; i < data.length; i++) {
+        const y = (data[i] / 128.0) * (c.height / 2);
+        if (i === 0) ctx.moveTo(0, y); else ctx.lineTo(i * step, y);
+      }
+    } else {
+      ctx.moveTo(0, c.height / 2); ctx.lineTo(c.width, c.height / 2);
+    }
+    ctx.stroke();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>

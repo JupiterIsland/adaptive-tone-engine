@@ -1,74 +1,116 @@
-# Adaptive Tone Engine 🎛️⚡
-### *Real-Time Dynamic Audio Intelligence for Guitarists and Producers*
+<p align="center">
+  <img src="docs/riffdna_logo.png" alt="RIFFDNA™ Logo" width="180" />
+</p>
 
-![Adaptive Tone Engine Banner](docs/adaptive_tone_engine_banner.jpg)
+# RIFFDNA™
 
-**Adaptive Tone Engine** is an intelligent audio DSP & machine-learning layer that listens to how a musician plays in real-time—analyzing pick attack transients, playing dynamics, and harmonic brightness—and continuously sculpts amplifier and FX parameters to match the player's groove.
+> **Every player leaves a signature. RIFFDNA learns yours.**  
+> *AI Performance-Adaptive Audio // Player-Adaptive Tone System*
 
-> **"Spend more time playing. Spend less time tweaking."**
+**RIFFDNA™** (formerly *Adaptive Tone Engine*) is an AI-powered player-adaptive tone system that listens to how musicians perform and continuously adjusts tone characteristics in real time.
+
+Most guitar rigs force musicians to adapt to presets.  
+**RIFFDNA adapts to the musician.**
 
 ---
 
-## ⚡ The Core Problem & Dual-Loop Solution
+## Why RIFFDNA?
 
-Guitarists lose creative focus constantly reaching down to adjust overdrive knobs, presence dials, and compressor thresholds between rhythm chugging, expressive fingerpicking, and high-gain solos. 
+Traditional rigs require:
+* Constant preset switching
+* Manual EQ adjustments
+* Compression tweaking & drive balancing
+* Different setups for rhythm and lead
 
-Running traditional AI models directly on real-time audio leads to buffer underruns, clicks, and unacceptable latency (> 10ms). **Adaptive Tone Engine solves this with an asynchronous dual-loop architecture:**
+**RIFFDNA changes this.** By analysing playing style, picking dynamics, attack rise-time, note density, and articulation, RIFFDNA automatically adjusts tone parameters while you play.
 
+**One player. One rig. Tone that evolves with the performance.**
+
+---
+
+## Watch (and Hear) The Tone Learn
+
+Imagine moving naturally between:
+* **Clean rhythm**
+* **Blues lead**
+* **Heavy palm-muted riffs**
+* **Expressive solos**
+
+Without touching a pedal. Without changing presets. Without opening a menu.  
+RIFFDNA follows the player and reacts in real time.
+
+> **Interactive Browser Rig:** Open [`docs/huggingface-space/index.html`](docs/huggingface-space/index.html) locally in any browser (or deploy it to a Hugging Face Static Space) to hear a live Web Audio A/B demonstration comparing a fixed preset against RIFFDNA adaptive DSP across Clean Rhythm, Heavy Palm-Mutes, and Lead Solo.
+
+---
+
+## Dual-Loop Architecture
+
+Running heavy ML directly inside an audio callback causes buffer underruns, clicks, and unacceptable latency (`> 10 ms`). RIFFDNA separates real-time audio processing from continuous player analysis into two asynchronous loops:
+
+```mermaid
+flowchart LR
+    IN["Guitar Audio Input"] --> LA["Loop A: Real-Time Performance DSP (&lt; 3 ms)<br/>Gain • Parametric EQ • Presence • Dynamics"]
+    LA --> OUT["Adaptive Tone Output"]
+    LA -- "Feature Stream" --> LB["Loop B: Async Learning Engine (15–50 ms)<br/>Pick Attack • Crest Factor • Spectral Centroid • Profile History"]
+    LB -- "Click-Free Cross-Faded Updates" --> LA
 ```
-[ Guitar Audio Input ] ────────► [ Loop A: Real-Time Audio DSP (< 3 ms) ] ────────► [ Output ]
-                                            ▲                  │
-                                        Parameter          Feature
-                                         Updates            Stream
-                                            │                  ▼
-                                  [ Loop B: Async Feature Extraction (15–50 ms) ]
-                                   • Pick attack transient velocity (Rise-time)
-                                   • RMS energy & Crest factor (Dynamics)
-                                   • Spectral centroid & Rolloff (Timbre)
-                                   • Style Classifier & Tone Profile Map
-```
 
-* **Loop A (Hot DSP Path, < 3 ms latency):** Executes low-overhead parametric EQ, dynamic compression curves, and gain scaling in real-time. Parameter updates use smooth linear cross-fades to eliminate zipper noise.
-* **Loop B (Async AI / Heuristic Analysis):** Inspects incoming audio frames, classifies performance intent (e.g. *heavy palm-mute* vs. *soft chord voicings* vs. *lead sustain*), and updates tone targets asynchronously.
+* **Loop A — Performance Engine (`< 3 ms`):** Ultra-low latency DSP applying smooth, click-free parameter cross-fades.
+* **Loop B — Learning Engine (`15–50 ms`):** Analyses player behaviour (`app/audio_analysis.py`, `app/learning_engine.py`, `app/cuda_audio.py`) and continuously refines tone targets and player signature profiles in SQLite.
 
 ---
 
-## 🎯 Key Features
+## Key Features
 
-1. **Pick Attack Transient Gate:** Detects the instantaneous rise-time and hardness of the pick strike. Dynamically expands headroom or adds warm saturation on aggressive attacks while opening up presence on light touches.
-2. **Spectral Timbre Tracking:** Computes rolling spectral centroid and rolloff frequencies to detect when single-note lead passages need a mid-frequency boost (800 Hz – 1.6 kHz) to cut through a band mix.
-3. **Harmonic Crest Analysis:** Distinguishes complex multi-string open chords from monophonic melodies, backing off muddy reverb/delay reflections during rhythm playing and enriching sustain on solo notes.
-4. **Hardware-Accelerated Fallback:** Built with multi-vendor support for **NVIDIA CUDA** (`cuSignal` FFTs), **AMD Zen AVX2 SIMD**, and standard cross-platform NumPy/SciPy backends.
-5. **FastAPI Live Telemetry:** Stream live audio dynamics, detected attack strength, and active tone recommendations directly to any web browser or pedalboard display.
+### Player Recognition
+RIFFDNA builds a live performance profile from your playing behaviour:
+* Picking dynamics & attack rise-time
+* Playing intensity & RMS crest factor
+* Note density & sustain decay slope
+* Spectral centroid (brightness) & articulation patterns
+
+### Adaptive Tone Engine
+Tone evolves automatically during performance:
+* Dynamic gain & overdrive adjustment
+* Adaptive mid-push & EQ shaping
+* Presence control & compression balancing
+* Hardware-accelerated CUDA / CPU fallback (`app/cuda_audio.py`)
+
+### Signature Profiles & Live Performance Mode
+Every musician develops a unique playing fingerprint. RIFFDNA stores evolving per-player profiles and feedback (`data/tone_engine.db`) designed for **Studio**, **Practice**, **Rehearsal**, and **Stage** workflows.
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
-### 1. Requirements
-* Python 3.10+
-* Ubuntu / WSL2 or Windows 11
-* Virtual environment recommended
-
-### 2. Installation
 ```bash
 git clone https://github.com/JupiterIsland/adaptive-tone-engine.git
 cd adaptive-tone-engine
 pip install -r requirements.txt
+uvicorn backend.main:app --reload
 ```
-
-### 3. Launch the API & Analyzer
-```bash
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-```
-Open **`http://localhost:8000/docs`** to explore the interactive API and upload WAV audio tracks for dynamic feature analysis.
 
 ---
 
-## 🗺️ Roadmap
+## The Vision
 
-- [x] Initial FastAPI ingestion & transient detection scaffolding
-- [x] Modern DSP Dual-Loop Architecture Specification & Studio Logo
-- [ ] Real-time PortAudio / ASIO low-latency microphone & audio interface stream
-- [ ] VST3 / CLAP / AU audio plugin wrapper (JUCE / C++)
-- [ ] Standalone headless pedalboard image for Raspberry Pi 5 & embedded ARM
+Most music technology focuses on equipment—amp modelling, impulse responses, and static presets.  
+**RIFFDNA focuses on the player.**
+
+The goal is simple: create technology that responds to musicians as naturally as musicians respond to their instruments.
+
+---
+
+## Founder
+
+Created by **Richard John Murray** (`JupiterIsland`).
+
+RIFFDNA was built around a simple idea:
+
+> *Your tone should follow your playing. Not the other way around.*
+
+---
+
+## License
+
+Licensed under the MIT License.
