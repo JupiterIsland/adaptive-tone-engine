@@ -84,8 +84,8 @@ Every musician develops a unique playing fingerprint. RIFFDNA stores evolving pe
 ## Quick Start
 
 ```bash
-git clone https://github.com/JupiterIsland/adaptive-tone-engine.git
-cd adaptive-tone-engine
+git clone https://github.com/JupiterIsland/riffdna.git
+cd riffdna
 pip install -r requirements.txt
 uvicorn backend.main:app --reload
 ```

@@ -16,4 +16,4 @@ Every player leaves a signature. **RIFFDNA™** learns yours.
 
 An AI-powered player-adaptive tone system by **Richard John Murray** that listens to how musicians perform and continuously adjusts tone characteristics in real time.
 
-- **GitHub:** https://github.com/JupiterIsland/adaptive-tone-engine
+- **GitHub:** https://github.com/JupiterIsland/riffdna
